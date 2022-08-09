@@ -1,4 +1,6 @@
+import { useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./utils/Theme";
 import { Routes, Route } from "react-router-dom";
 import Menu from "./components/Menu";
 import Navbar from "./components/Navbar";
@@ -15,18 +17,22 @@ const Wrapper = styled.div`
 `;
 
 function App() {
+  const [darkMode, setDarkMode] = useState(true);
+
   return (
-    <Container>
-      <Menu />
-      <Main>
-        <Navbar />
-        <Wrapper>
-          <Routes>
-            <Route path="/"></Route>
-          </Routes>
-        </Wrapper>
-      </Main>
-    </Container>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <Container>
+        <Menu darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Main>
+          <Navbar />
+          <Wrapper>
+            <Routes>
+              <Route path="/"></Route>
+            </Routes>
+          </Wrapper>
+        </Main>
+      </Container>
+    </ThemeProvider>
   );
 }
 

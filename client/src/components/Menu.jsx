@@ -22,9 +22,9 @@ import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightne
 
 const Container = styled.div`
   flex: 1;
-  background-color: black;
+  background-color: ${({ theme }) => theme.bgLighter};
   height: 100vh;
-  color: white;
+  color: ${({ theme }) => theme.text};
   font-size: 14px;
   position: sticky;
   top: 0;
@@ -32,7 +32,6 @@ const Container = styled.div`
 const Wrapper = styled.div`
   padding: 18px 26px;
 `;
-
 const Logo = styled.div`
   display: flex;
   align-items: center;
@@ -52,13 +51,13 @@ const Item = styled.div`
   cursor: pointer;
   padding: 7.5px 0px;
   &:hover {
-    background-color: white;
+    background-color: ${({ theme }) => theme.soft};
   }
 `;
 
 const Hr = styled.hr`
   margin: 15px 0px;
-  border: 0.5px solid white;
+  border: 0.5px solid ${({ theme }) => theme.soft};
 `;
 
 const Login = styled.div``;
@@ -83,16 +82,15 @@ const Title = styled.h2`
   margin-bottom: 20px;
 `;
 
-const Menu = () => {
-  const currentUser = false;
-
+const Menu = ({ darkMode, setDarkMode }) => {
+  const currentUser = true;
   return (
     <Container>
       <Wrapper>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
             <Img src={LamaTube} />
-            LamaTube
+            SavaTube
           </Logo>
         </Link>
         <Item>
@@ -138,7 +136,7 @@ const Menu = () => {
             <Hr />
           </>
         )}
-        <Title>BEST OF LAMATUBE</Title>
+        <Title>BEST OF SAVATUBE</Title>
         <Item>
           <LibraryMusicOutlinedIcon />
           Music
@@ -175,6 +173,10 @@ const Menu = () => {
         <Item>
           <HelpOutlineOutlinedIcon />
           Help
+        </Item>
+        <Item onClick={() => setDarkMode(!darkMode)}>
+          <SettingsBrightnessOutlinedIcon />
+          {darkMode ? "Light" : "Dark"} Mode
         </Item>
       </Wrapper>
     </Container>
