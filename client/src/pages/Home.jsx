@@ -12,30 +12,30 @@ const Home = () => {
   //   const [videos, setVideos] = useState([]);
   return (
     <Container>
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
-      <Card type="sm" />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
     </Container>
   );
 };

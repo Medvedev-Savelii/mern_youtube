@@ -54,17 +54,18 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const Card = () => {
+const Card = ({ type }) => {
   return (
     <Link to={`/video/id`} style={{ textDecoration: "none" }}>
-      <Container>
+      <Container type={type}>
         <Image
           src={
             "https://i.pinimg.com/originals/70/c4/c1/70c4c18847ab711392cea47271fa4cde.jpg"
           }
+          type={type}
         />
-        <Details>
-          <ChannelImage src={userPhoto} />
+        <Details type={type}>
+          <ChannelImage src={userPhoto} type={type} />
           <Texts>
             <Title>{"Berserk: Ougon Jidai-hen I - Haou no Tamago"}</Title>
             <ChannelName>{"Berserk Channel"}</ChannelName>

@@ -9,7 +9,11 @@ const Container = styled.div`
 const Recommendation = () => {
   return (
     <Container>
-      <Card />
+      <Card type={"sm"} />
+      <Card type={"sm"} />
+      <Card type={"sm"} />
+      <Card type={"sm"} />
+      <Card type={"sm"} />
     </Container>
   );
 };

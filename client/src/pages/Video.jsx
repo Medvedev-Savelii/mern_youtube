@@ -9,7 +9,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { format } from "timeago.js";
-// import Comments from "../components/Comments";
+import Comments from "../components/Comments";
 import Card from "../components/Card";
 import Berserk from "../img/Berserk.mp4";
 import Recommendation from "../components/Recommendation";
@@ -160,6 +160,8 @@ const Video = () => {
           </ChannelInfo>
           <Subscribe>SUBSCRIBED</Subscribe>
         </Channel>
+        <Hr />
+        <Comments videoId={Berserk} />
       </Content>
       <Recommendation tags={Berserk} />
     </Container>
