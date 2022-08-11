@@ -83,7 +83,7 @@ const Title = styled.h2`
 `;
 
 const Menu = ({ darkMode, setDarkMode }) => {
-  const currentUser = true;
+  const currentUser = false;
   return (
     <Container>
       <Wrapper>
