@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import styled from "styled-components";
-
+import axios from "axios";
+import { useDispatch } from "react-redux";
+////////////////////////////////////////////////////////////////////
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -68,6 +71,20 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const proxy = "http://localhost:8080/api";
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    dispatch(loginStart());
+    try {
+      const res = await axios.post(proxy + "/auth/signin", { name, password });
+      dispatch(loginSuccess(res.data));
+      navigate("/");
+    } catch (err) {
+      dispatch(loginFailure());
+    }
+  };
   return (
     <Container>
       <Wrapper>
@@ -82,7 +99,7 @@ const SignIn = () => {
           placeholder="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button>Sign in</Button>
+        <Button onClick={handleLogin}>Sign in</Button>
         <Title>or</Title>
         <Button>Signin with Google</Button>
         <Title>or</Title>

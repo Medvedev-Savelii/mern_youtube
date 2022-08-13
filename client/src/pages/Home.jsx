@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../components/Card";
+import axios from "axios";
 ///////////////////////////////////////////////////////
 const Container = styled.div`
   display: flex;
@@ -8,34 +9,23 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
-const Home = () => {
-  //   const [videos, setVideos] = useState([]);
+const Home = ({ type }) => {
+  const [videos, setVideos] = useState([]);
+  const proxy = "http://localhost:8080/api";
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      const res = await axios.get(proxy + `/videos/${type}`);
+      setVideos(res.data);
+    };
+    fetchVideos();
+  }, [type]);
+
   return (
     <Container>
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+      {videos.map((video) => (
+        <Card key={video._id} video={video} />
+      ))}
     </Container>
   );
 };

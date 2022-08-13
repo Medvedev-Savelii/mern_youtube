@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 import { format } from "timeago.js";
 /////////////////////////////////////////////////////////////////////
-import userPhoto from "../img/avatar.jpg";
 
 const Container = styled.div`
   width: ${(props) => props.type !== "sm" && "360px"};
@@ -54,22 +54,29 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const Card = ({ type }) => {
+const Card = ({ type, video }) => {
+  const [channel, setChannel] = useState({});
+  const proxy = "http://localhost:8080/api";
+
+  useEffect(() => {
+    const fetchChannel = async () => {
+      const res = await axios.get(proxy + `/users/find/${video.userId}`);
+      setChannel(res.data);
+    };
+    fetchChannel();
+  }, [video.userId]);
   return (
-    <Link to={`/video/id`} style={{ textDecoration: "none" }}>
+    <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
       <Container type={type}>
-        <Image
-          src={
-            "https://i.pinimg.com/originals/70/c4/c1/70c4c18847ab711392cea47271fa4cde.jpg"
-          }
-          type={type}
-        />
+        <Image type={type} src={video.imgUrl} />
         <Details type={type}>
-          <ChannelImage src={userPhoto} type={type} />
+          <ChannelImage type={type} src={channel.img} />
           <Texts>
-            <Title>{"Berserk: Ougon Jidai-hen I - Haou no Tamago"}</Title>
-            <ChannelName>{"Berserk Channel"}</ChannelName>
-            <Info>36,500 views • 1 day ago</Info>
+            <Title>{video.title}</Title>
+            <ChannelName>{channel.name}</ChannelName>
+            <Info>
+              {video.views} views • {format(video.createdAt)}
+            </Info>
           </Texts>
         </Details>
       </Container>
