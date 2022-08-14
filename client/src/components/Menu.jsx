@@ -19,7 +19,8 @@ import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 ///////////////////////////////////////////////////////////////
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
 
 const Container = styled.div`
   flex: 1;
@@ -85,6 +86,8 @@ const Title = styled.h2`
 
 const Menu = ({ darkMode, setDarkMode }) => {
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
   return (
     <Container>
       <Wrapper>
@@ -123,7 +126,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
           History
         </Item>
         <Hr />
-        {!currentUser && (
+        {!currentUser ? (
           <>
             <Login>
               Sign in to like videos, comment, and subscribe.
@@ -136,6 +139,15 @@ const Menu = ({ darkMode, setDarkMode }) => {
             </Login>
             <Hr />
           </>
+        ) : (
+          <Login style={{ marginBottom: "10px" }}>
+            <Link to="signin" style={{ textDecoration: "none" }}>
+              <Button onClick={() => dispatch(logout())}>
+                <AccountCircleOutlinedIcon />
+                LOGOUT
+              </Button>
+            </Link>
+          </Login>
         )}
         <Title>BEST OF SAVATUBE</Title>
         <Item>

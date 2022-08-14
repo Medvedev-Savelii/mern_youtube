@@ -122,7 +122,6 @@ const Video = () => {
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
   const [channel, setChannel] = useState({});
-  const [video, setVideo] = useState({});
   const proxy = "http://localhost:8080/api";
 
   useEffect(() => {
@@ -133,7 +132,6 @@ const Video = () => {
           proxy + `/users/find/${videoRes.data.userId}`
         );
         setChannel(channelRes.data);
-        setVideo(videoRes.data);
       } catch (err) {}
     };
     fetchData();
@@ -157,7 +155,12 @@ const Video = () => {
     await axios.put(proxy + `/users/dislike/${currentVideo._id}`);
     dispatch(dislike(currentUser._id));
   };
-
+  const handleSub = async () => {
+    currentUser.subscribedUsers.includes(channel._id)
+      ? await axios.put(proxy + `/users/unsub/${channel._id}`)
+      : await axios.put(proxy + `/users/sub/${channel._id}`);
+    dispatch(subscription(channel._id));
+  };
   return (
     <Container>
       <Content>
@@ -170,12 +173,20 @@ const Video = () => {
             {currentVideo.views} views • {format(currentVideo.createdAt)}
           </Info>
           <Buttons>
-            <Button>
-              <ThumbUpOutlinedIcon />
+            <Button onClick={handleLike}>
+              {currentVideo.likes?.includes(currentUser?._id) ? (
+                <ThumbUpIcon />
+              ) : (
+                <ThumbUpOutlinedIcon />
+              )}{" "}
               {currentVideo.likes?.length}
             </Button>
-            <Button>
-              <ThumbDownOffAltOutlinedIcon />
+            <Button onClick={handleDislike}>
+              {currentVideo.dislikes?.includes(currentUser?._id) ? (
+                <ThumbDownIcon />
+              ) : (
+                <ThumbDownOffAltOutlinedIcon />
+              )}{" "}
               Dislike
             </Button>
             <Button>
@@ -197,14 +208,14 @@ const Video = () => {
               <Description>{currentVideo.desc}</Description>
             </ChannelDetail>
           </ChannelInfo>
-          <Subscribe>
+          <Subscribe onClick={handleSub}>
             {currentUser.subscribedUsers?.includes(channel._id)
               ? "SUBSCRIBED"
               : "SUBSCRIBE"}
           </Subscribe>
         </Channel>
         <Hr />
-        {/* <Comments videoId={currentVideo._id} /> */}
+        <Comments videoId={currentVideo._id} />
       </Content>
       {/* <Recommendation tags={currentVideo.tags} /> */}
     </Container>

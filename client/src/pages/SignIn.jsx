@@ -94,7 +94,7 @@ const SignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         axios
-          .post("/auth/google", {
+          .post(proxy + "/auth/google", {
             name: result.user.displayName,
             email: result.user.email,
             img: result.user.photoURL,
