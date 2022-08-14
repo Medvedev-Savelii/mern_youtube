@@ -4,6 +4,9 @@ import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import styled from "styled-components";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { auth, provider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
+import { async } from "@firebase/util";
 ////////////////////////////////////////////////////////////////////
 const Container = styled.div`
   display: flex;
@@ -85,6 +88,42 @@ const SignIn = () => {
       dispatch(loginFailure());
     }
   };
+
+  const signInWithGoogle = async () => {
+    dispatch(loginStart());
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        axios
+          .post("/auth/google", {
+            name: result.user.displayName,
+            email: result.user.email,
+            img: result.user.photoURL,
+          })
+          .then((res) => {
+            console.log(res);
+            dispatch(loginSuccess(res.data));
+            navigate("/");
+          });
+      })
+      .catch((error) => {
+        dispatch(loginFailure());
+      });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(proxy + "/auth/signup", {
+        name,
+        email,
+        password,
+      });
+      console.log(res.data);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Container>
       <Wrapper>
@@ -101,7 +140,7 @@ const SignIn = () => {
         />
         <Button onClick={handleLogin}>Sign in</Button>
         <Title>or</Title>
-        <Button>Signin with Google</Button>
+        <Button onClick={signInWithGoogle}>Signin with Google</Button>
         <Title>or</Title>
         <Input
           placeholder="username"
@@ -113,7 +152,7 @@ const SignIn = () => {
           placeholder="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button>Sign up</Button>
+        <Button onClick={handleRegister}>Sign up</Button>
       </Wrapper>
       <More>
         English(USA)

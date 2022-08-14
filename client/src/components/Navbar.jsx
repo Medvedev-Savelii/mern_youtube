@@ -4,7 +4,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { Link, useNavigate } from "react-router-dom";
-import userPhoto from "../img/avatar.jpg";
+import { useSelector } from "react-redux";
 /////////////////////////////////////////////////////////////////////////
 const Container = styled.div`
   position: sticky;
@@ -74,7 +74,7 @@ const Avatar = styled.img`
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const currentUser = false;
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <>
       <Container>
@@ -89,8 +89,8 @@ const Navbar = () => {
           {currentUser ? (
             <User>
               <VideoCallOutlinedIcon />
-              <Avatar src={userPhoto} />
-              Saveliy
+              <Avatar src={currentUser.img} />
+              {currentUser.name}
             </User>
           ) : (
             <Link to="signin" style={{ textDecoration: "none" }}>
