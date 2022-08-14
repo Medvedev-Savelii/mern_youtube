@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
@@ -6,14 +6,14 @@ import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { dislike, fetchSuccess, like } from "../redux/videoSlice";
 import { format } from "timeago.js";
-import Comments from "../components/Comments";
-import Card from "../components/Card";
-import Berserk from "../img/Berserk.mp4";
+import { subscription } from "../redux/userSlice";
 import Recommendation from "../components/Recommendation";
-import userPhoto from "../img/avatar.jpg";
+import Comments from "../components/Comments";
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -117,19 +117,62 @@ const VideoFrame = styled.video`
   object-fit: cover;
 `;
 const Video = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  const { currentVideo } = useSelector((state) => state.video);
+  const dispatch = useDispatch();
+  const path = useLocation().pathname.split("/")[2];
+  const [channel, setChannel] = useState({});
+  const [video, setVideo] = useState({});
+  const proxy = "http://localhost:8080/api";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const videoRes = await axios.get(proxy + `/videos/find/${path}`);
+        const channelRes = await axios.get(
+          proxy + `/users/find/${videoRes.data.userId}`
+        );
+        setChannel(channelRes.data);
+        setVideo(videoRes.data);
+      } catch (err) {}
+    };
+    fetchData();
+  }, [path]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const videoRes = await axios.get(proxy + `/videos/find/${path}`);
+        dispatch(fetchSuccess(videoRes.data));
+      } catch (err) {}
+    };
+    fetchData();
+  }, [path, dispatch]);
+
+  const handleLike = async () => {
+    await axios.put(proxy + `/users/like/${currentVideo._id}`);
+    dispatch(like(currentUser._id));
+  };
+  const handleDislike = async () => {
+    await axios.put(proxy + `/users/dislike/${currentVideo._id}`);
+    dispatch(dislike(currentUser._id));
+  };
+
   return (
     <Container>
       <Content>
         <VideoWrapper>
-          <VideoFrame src={Berserk} controls />
+          <VideoFrame src={currentVideo.videoUrl} controls />
         </VideoWrapper>
-        <Title>{"Berserk: Ougon Jidai-hen I - Haou no Tamago"}</Title>
+        <Title>{currentVideo.title}</Title>
         <Details>
-          <Info>36,500 views • 1 day ago</Info>
+          <Info>
+            {currentVideo.views} views • {format(currentVideo.createdAt)}
+          </Info>
           <Buttons>
             <Button>
               <ThumbUpOutlinedIcon />
-              1485
+              {currentVideo.likes?.length}
             </Button>
             <Button>
               <ThumbDownOffAltOutlinedIcon />
@@ -147,23 +190,23 @@ const Video = () => {
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src={userPhoto} />
+            <Image src={channel.img} />
             <ChannelDetail>
-              <ChannelName>{"BerserkNameChanel"}</ChannelName>
-              <ChannelCounter>{"4567"} subscribers</ChannelCounter>
-              <Description>
-                {
-                  "Гатс, один из сильнейших мечников, не имеет определенного пути, вся его жизнь заключена в сражениях. После одного из них он встречает Гриффита, предводителя известных наемников Банды Ястреба, который моментально захотел мечника себе."
-                }
-              </Description>
+              <ChannelName>{channel.name}</ChannelName>
+              <ChannelCounter>{channel.subsctibers} subscribers</ChannelCounter>
+              <Description>{currentVideo.desc}</Description>
             </ChannelDetail>
           </ChannelInfo>
-          <Subscribe>SUBSCRIBED</Subscribe>
+          <Subscribe>
+            {currentUser.subscribedUsers?.includes(channel._id)
+              ? "SUBSCRIBED"
+              : "SUBSCRIBE"}
+          </Subscribe>
         </Channel>
         <Hr />
-        <Comments videoId={Berserk} />
+        {/* <Comments videoId={currentVideo._id} /> */}
       </Content>
-      <Recommendation tags={Berserk} />
+      {/* <Recommendation tags={currentVideo.tags} /> */}
     </Container>
   );
 };
