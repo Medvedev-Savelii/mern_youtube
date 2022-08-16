@@ -1,4 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "../axios";
+
+export const fetchPostLike = createAsyncThunk(
+  "video/fetchPostLike",
+  async (currentVideo) => {
+    const res = await axios.put(`/users/like/${currentVideo._id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return res;
+  }
+);
 
 const initialState = {
   currentVideo: "",

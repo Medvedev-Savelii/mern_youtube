@@ -148,7 +148,11 @@ const Video = () => {
   }, [path, dispatch]);
 
   const handleLike = async () => {
-    await axios.put(proxy + `/users/like/${currentVideo._id}`);
+    await axios.put(proxy + `/users/like/${currentVideo._id}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+      },
+    });
     dispatch(like(currentUser._id));
   };
   const handleDislike = async () => {

@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { async } from "@firebase/util";
+axios.defaults.withCredentials = true; // NEW
+
 ////////////////////////////////////////////////////////////////////
 const Container = styled.div`
   display: flex;
@@ -81,8 +83,16 @@ const SignIn = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const res = await axios.post(proxy + "/auth/signin", { name, password });
-      dispatch(loginSuccess(res.data));
+      const { data } = await axios.post(proxy + "/auth/signin", {
+        name,
+        password,
+      });
+      dispatch(loginSuccess(data));
+      console.log(data.token);
+      if (!data.token) {
+        return alert("Не удалось авторизоваться!");
+      }
+      window.localStorage.setItem("token", JSON.stringify(data.token));
       navigate("/");
     } catch (err) {
       dispatch(loginFailure());
@@ -113,12 +123,16 @@ const SignIn = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(proxy + "/auth/signup", {
+      const { data } = await axios.post(proxy + "/auth/signup", {
         name,
         email,
         password,
       });
-      console.log(res.data);
+      console.log(data.token);
+      if (!data.token) {
+        return alert("Не удалось авторизоваться!");
+      }
+      window.localStorage.setItem("token", data.token);
       navigate("/");
     } catch (err) {
       console.log(err);
