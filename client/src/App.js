@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Video from "./pages/Video";
 import SignIn from "./pages/SignIn";
+import Search from "./pages/Search";
 
 const Container = styled.div`
   display: flex;
@@ -38,6 +39,7 @@ function App() {
                   path="signin"
                   element={currentUser ? <Home /> : <SignIn />}
                 />
+                <Route path="search" element={<Search />} />
                 <Route path="video">
                   <Route path=":id" element={<Video />} />
                 </Route>

@@ -49,7 +49,7 @@ const Comments = ({ videoId }) => {
       } catch (err) {}
     };
     fetchComments();
-  }, [videoId]);
+  }, [videoId, desc]);
 
   //TODO: ADD NEW COMMENT FUNCTIONALITY
 
@@ -67,6 +67,7 @@ const Comments = ({ videoId }) => {
           desc,
         });
         dispatch(commentSuccess(data));
+        setDesc("");
       } catch (error) {
         dispatch(commentFailure());
       }

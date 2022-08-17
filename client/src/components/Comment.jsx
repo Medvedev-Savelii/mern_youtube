@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { format } from "timeago.js";
 
 const Container = styled.div`
   display: flex;
@@ -38,10 +40,12 @@ const Text = styled.span`
 
 const Comment = ({ comment }) => {
   const [channel, setChannel] = useState({});
+  const { currentUser } = useSelector((state) => state.user);
+  const proxy = "http://localhost:8080/api";
 
   useEffect(() => {
     const fetchComment = async () => {
-      const res = await axios.get(`/users/find/${comment.userId}`);
+      const res = await axios.get(proxy + `/users/find/${comment.userId}`);
       setChannel(res.data);
     };
     fetchComment();
@@ -49,10 +53,10 @@ const Comment = ({ comment }) => {
 
   return (
     <Container>
-      <Avatar src={channel.img} />
+      <Avatar src={currentUser.img} />
       <Details>
         <Name>
-          {channel.name} <Date>1 day ago</Date>
+          {currentUser.name} <Date>{format(comment.createdAt)}</Date>
         </Name>
         <Text>{comment.desc}</Text>
       </Details>
