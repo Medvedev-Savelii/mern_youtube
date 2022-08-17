@@ -88,11 +88,6 @@ const SignIn = () => {
         password,
       });
       dispatch(loginSuccess(data));
-      console.log(data.token);
-      if (!data.token) {
-        return alert("Не удалось авторизоваться!");
-      }
-      window.localStorage.setItem("token", JSON.stringify(data.token));
       navigate("/");
     } catch (err) {
       dispatch(loginFailure());

@@ -3,6 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Comment from "./Comment";
+import { useDispatch } from "react-redux";
+import {
+  commentStart,
+  commentSuccess,
+  commentFailure,
+} from "../redux/commentSlice";
 
 const Container = styled.div``;
 
@@ -31,8 +37,10 @@ const Input = styled.input`
 const Comments = ({ videoId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [comments, setComments] = useState([]);
-  const proxy = "http://localhost:8080/api";
+  const [desc, setDesc] = useState("");
+  const dispatch = useDispatch();
 
+  const proxy = "http://localhost:8080/api";
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -45,11 +53,36 @@ const Comments = ({ videoId }) => {
 
   //TODO: ADD NEW COMMENT FUNCTIONALITY
 
+  const handleChange = (e) => {
+    setDesc(e.target.value);
+  };
+
+  const handleCommetPost = async (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      dispatch(commentStart());
+      try {
+        const { data } = await axios.post(proxy + `/comments/`, {
+          videoId,
+          desc,
+        });
+        dispatch(commentSuccess(data));
+      } catch (error) {
+        dispatch(commentFailure());
+      }
+    }
+  };
+
   return (
     <Container>
       <NewComment>
         <Avatar src={currentUser.img} />
-        <Input placeholder="Add a comment..." />
+        <Input
+          placeholder="Add a comment..."
+          value={desc}
+          onChange={handleChange}
+          onKeyDown={handleCommetPost}
+        />
       </NewComment>
       {comments.map((comment) => (
         <Comment key={comment._id} comment={comment} />
