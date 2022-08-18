@@ -88,6 +88,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+
   return (
     <Container>
       <Wrapper>
@@ -175,7 +176,9 @@ const Menu = ({ darkMode, setDarkMode }) => {
           Live
         </Item>
         <Hr />
-        <Item>
+        <Item 
+         
+            >
           <SettingsOutlinedIcon />
           Settings
         </Item>
@@ -192,7 +195,9 @@ const Menu = ({ darkMode, setDarkMode }) => {
           {darkMode ? "Light" : "Dark"} Mode
         </Item>
       </Wrapper>
+
     </Container>
+    
   );
 };
 

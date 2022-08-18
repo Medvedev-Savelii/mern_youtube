@@ -6,7 +6,8 @@ import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Upload from "./Upload";
-
+import UpdateProfileUser from "./UpdateProfileUser";
+import defaultProfile from "../img/defaultProfile.png"
 /////////////////////////////////////////////////////////////////////////
 const Container = styled.div`
   position: sticky;
@@ -77,6 +78,8 @@ const Avatar = styled.img`
 const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
+
   const [q, setQ] = useState("");
   const { currentUser } = useSelector((state) => state.user);
   return (
@@ -96,7 +99,9 @@ const Navbar = () => {
                 style={{ cursor: "pointer" }}
                 onClick={() => setOpen(true)}
               />
-              <Avatar src={currentUser.img} />
+              <Avatar src={!currentUser ? currentUser.img : defaultProfile} 
+                style={{ cursor: "pointer" }}
+                onClick={() => setOpenProfile(true)}/>
               {currentUser.name}
             </User>
           ) : (
@@ -110,6 +115,8 @@ const Navbar = () => {
         </Wrapper>
       </Container>
       {open && <Upload setOpen={setOpen} />}
+      {openProfile && <UpdateProfileUser setOpenProfile={setOpenProfile} />}
+
     </>
   );
 };
