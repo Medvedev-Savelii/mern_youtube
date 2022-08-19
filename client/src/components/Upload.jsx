@@ -139,7 +139,7 @@ const Upload = ({ setOpen }) => {
     e.preventDefault();
     const res = await axios.post(proxy + "/videos", { ...inputs, tags });
     setOpen(false);
-    res.status === 200 && navigate(proxy + `/video/${res.data._id}`);
+    res.status === 200 && navigate(`/video/${res.data._id}`);
   };
 
   return (
@@ -152,26 +152,26 @@ const Upload = ({ setOpen }) => {
           "Uploading:" + videoPerc
         ) : (
           <Input
-            type="file"
-            accept="video/*"
+            type='file'
+            accept='video/*'
             onChange={(e) => setVideo(e.target.files[0])}
           />
         )}
         <Input
-          type="text"
-          placeholder="Title"
-          name="title"
+          type='text'
+          placeholder='Title'
+          name='title'
           onChange={handleChange}
         />
         <Desc
-          placeholder="Description"
-          name="desc"
+          placeholder='Description'
+          name='desc'
           rows={8}
           onChange={handleChange}
         />
         <Input
-          type="text"
-          placeholder="Separate the tags with commas."
+          type='text'
+          placeholder='Separate the tags with commas.'
           onChance={handleTags}
         />
         <Label>Image:</Label>
@@ -179,8 +179,8 @@ const Upload = ({ setOpen }) => {
           "Uploading:" + imgPerc + "%"
         ) : (
           <Input
-            type="file"
-            accept="image/*"
+            type='file'
+            accept='image/*'
             onChange={(e) => setImg(e.target.files[0])}
           />
         )}

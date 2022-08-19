@@ -123,7 +123,6 @@ const Video = () => {
   const path = useLocation().pathname.split("/")[2];
   const [channel, setChannel] = useState({});
   const proxy = "http://localhost:8080/api";
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -145,6 +144,16 @@ const Video = () => {
       } catch (err) {}
     };
     fetchData();
+  }, [path, dispatch]);
+
+  useEffect(() => {
+    const addView = async () => {
+      try {
+        const videoRes = await axios.put(proxy + `/videos/view/${path}`);
+        dispatch(fetchSuccess(videoRes.data));
+      } catch (err) {}
+    };
+    addView();
   }, [path, dispatch]);
 
   const handleLike = async () => {

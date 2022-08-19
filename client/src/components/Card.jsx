@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { format } from "timeago.js";
+import { fetchSuccess } from "../redux/videoSlice";
 /////////////////////////////////////////////////////////////////////
 
 const Container = styled.div`
@@ -65,6 +66,7 @@ const Card = ({ type, video }) => {
     };
     fetchChannel();
   }, [video.userId]);
+
   return (
     <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
       <Container type={type}>

@@ -65,22 +65,25 @@ const UpdateProfileUser = ({ setOpenProfile }) => {
   const [name, setName] = useState("");
   const dispatch = useDispatch();
   const proxy = "http://localhost:8080/api";
+  console.log(img);
 
-  const onImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      let img = event.target.files[0];
-      if (event.target.name === "img") {
-        setImg(img);
-      } 
+  const onImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      let image = e.target.files[0];
+      if (e.target.name === "img") {
+        setImg(image);
+      }
     }
   };
 
-
-
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    const res = await axios.put(proxy + `/users/${currentUser._id}`, {name, email });
-    dispatch(updateSuccess(res.data))
+    const res = await axios.put(proxy + `/users/${currentUser._id}`, {
+      img,
+      name,
+      email,
+    });
+    dispatch(updateSuccess(res.data));
     setOpenProfile(false);
   };
 
@@ -90,30 +93,23 @@ const UpdateProfileUser = ({ setOpenProfile }) => {
         <Close onClick={() => setOpenProfile(false)}>X</Close>
         <Title>Update Profile User</Title>
         <Label>Update Avatar:</Label>
-          <Input
-          type="file"
-          accept="image/*"
-          name="img"
-          onChange={onImageChange}
-        />
+        <Input type='file' name='img' onChange={onImageChange} />
         <Label>Update Name:</Label>
         <Input
-          type="text"
-          placeholder="Name"
-          name="name"
+          type='text'
+          placeholder='Name'
+          name='name'
           value={name}
           onChange={(e) => setName(e.target.value)}
-
         />
         <Label>Update Email:</Label>
         <Input
-          type="email"
-          placeholder="Email"
-          name="email"
+          type='email'
+          placeholder='Email'
+          name='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-
-        />    
+        />
         <Button onClick={handleUpdateProfile}>Update</Button>
       </Wrapper>
     </Container>
