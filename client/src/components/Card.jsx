@@ -58,6 +58,7 @@ const Info = styled.div`
 const Card = ({ type, video }) => {
   const [channel, setChannel] = useState({});
   const proxy = "http://localhost:8080/api";
+  const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
 
   useEffect(() => {
     const fetchChannel = async () => {
@@ -72,7 +73,14 @@ const Card = ({ type, video }) => {
       <Container type={type}>
         <Image type={type} src={video.imgUrl} />
         <Details type={type}>
-          <ChannelImage type={type} src={channel.img} />
+          <ChannelImage
+            type={type}
+            src={
+              !channel
+                ? serverPublic + channel.img
+                : serverPublic + "defaultProfile.png"
+            }
+          />
           <Texts>
             <Title>{video.title}</Title>
             <ChannelName>{channel.name}</ChannelName>

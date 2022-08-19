@@ -60,30 +60,39 @@ const Label = styled.label`
 `;
 const UpdateProfileUser = ({ setOpenProfile }) => {
   const { currentUser } = useSelector((state) => state.user);
-  const [img, setImg] = useState(undefined);
+  const [avatar, setAvatar] = useState(undefined);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const dispatch = useDispatch();
   const proxy = "http://localhost:8080/api";
-  console.log(img);
+  console.log(avatar);
 
   const onImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       let image = e.target.files[0];
       if (e.target.name === "img") {
-        setImg(image);
+        setAvatar(image);
       }
     }
   };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    const res = await axios.put(proxy + `/users/${currentUser._id}`, {
-      img,
-      name,
-      email,
-    });
-    dispatch(updateSuccess(res.data));
+    if (avatar) {
+      const img = Date.now() + avatar.name;
+      await axios.post(proxy + `/upload`, {
+        img,
+      });
+      try {
+        const res = await axios.put(proxy + `/users/${currentUser._id}`, {
+          name,
+          email,
+        });
+        dispatch(updateSuccess(res.data));
+      } catch (err) {
+        console.log(err);
+      }
+    }
     setOpenProfile(false);
   };
 
@@ -115,5 +124,4 @@ const UpdateProfileUser = ({ setOpenProfile }) => {
     </Container>
   );
 };
-
 export default UpdateProfileUser;

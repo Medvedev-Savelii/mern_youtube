@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Upload from "./Upload";
 import UpdateProfileUser from "./UpdateProfileUser";
-import defaultProfile from "../img/defaultProfile.png"
 /////////////////////////////////////////////////////////////////////////
 const Container = styled.div`
   position: sticky;
@@ -79,6 +78,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
+  const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const [q, setQ] = useState("");
   const { currentUser } = useSelector((state) => state.user);
@@ -88,7 +88,7 @@ const Navbar = () => {
         <Wrapper>
           <Search>
             <Input
-              placeholder="Search"
+              placeholder='Search'
               onChange={(e) => setQ(e.target.value)}
             />
             <SearchOutlinedIcon onClick={() => navigate(`/search?q=${q}`)} />
@@ -99,13 +99,19 @@ const Navbar = () => {
                 style={{ cursor: "pointer" }}
                 onClick={() => setOpen(true)}
               />
-              <Avatar src={!currentUser ? currentUser.img : defaultProfile} 
+              <Avatar
+                src={
+                  !currentUser
+                    ? serverPublic + currentUser.img
+                    : serverPublic + "defaultProfile.png"
+                }
                 style={{ cursor: "pointer" }}
-                onClick={() => setOpenProfile(true)}/>
+                onClick={() => setOpenProfile(true)}
+              />
               {currentUser.name}
             </User>
           ) : (
-            <Link to="signin" style={{ textDecoration: "none" }}>
+            <Link to='signin' style={{ textDecoration: "none" }}>
               <Button>
                 <AccountCircleOutlinedIcon />
                 SIGN IN
@@ -116,7 +122,6 @@ const Navbar = () => {
       </Container>
       {open && <Upload setOpen={setOpen} />}
       {openProfile && <UpdateProfileUser setOpenProfile={setOpenProfile} />}
-
     </>
   );
 };
