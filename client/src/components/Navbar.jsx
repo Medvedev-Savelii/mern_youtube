@@ -82,6 +82,8 @@ const Navbar = () => {
 
   const [q, setQ] = useState("");
   const { currentUser } = useSelector((state) => state.user);
+
+  console.log(serverPublic + currentUser.img);
   return (
     <>
       <Container>
@@ -101,7 +103,7 @@ const Navbar = () => {
               />
               <Avatar
                 src={
-                  !currentUser
+                  currentUser.img
                     ? serverPublic + currentUser.img
                     : serverPublic + "defaultProfile.png"
                 }

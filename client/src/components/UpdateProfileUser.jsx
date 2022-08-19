@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSuccess } from "../redux/userSlice";
 
@@ -68,30 +67,27 @@ const UpdateProfileUser = ({ setOpenProfile }) => {
   console.log(avatar);
 
   const onImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      let image = e.target.files[0];
-      if (e.target.name === "img") {
-        setAvatar(image);
-      }
-    }
+    setAvatar(e.target.files[0]);
   };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     if (avatar) {
-      const img = Date.now() + avatar.name;
-      await axios.post(proxy + `/upload`, {
-        img,
+      const formData = new FormData();
+      const fileName = Date.now() + avatar.name;
+      formData.append("name", fileName);
+      formData.append("file", avatar);
+      const data = await axios.post(proxy + `/upload`, formData);
+      dispatch(updateSuccess(data));
+    }
+    try {
+      const res = await axios.put(proxy + `/users/${currentUser._id}`, {
+        name,
+        email,
       });
-      try {
-        const res = await axios.put(proxy + `/users/${currentUser._id}`, {
-          name,
-          email,
-        });
-        dispatch(updateSuccess(res.data));
-      } catch (err) {
-        console.log(err);
-      }
+      dispatch(updateSuccess(res.data));
+    } catch (err) {
+      console.log(err);
     }
     setOpenProfile(false);
   };
