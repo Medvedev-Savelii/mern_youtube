@@ -42,6 +42,7 @@ const Comment = ({ comment }) => {
   const [channel, setChannel] = useState({});
   const { currentUser } = useSelector((state) => state.user);
   const proxy = "http://localhost:8080/api";
+  const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
 
   useEffect(() => {
     const fetchComment = async () => {
@@ -53,7 +54,13 @@ const Comment = ({ comment }) => {
 
   return (
     <Container>
-      <Avatar src={currentUser.img} />
+      <Avatar
+        src={
+          currentUser.img
+            ? serverPublic + currentUser.img
+            : serverPublic + "defaultProfile.png"
+        }
+      />
       <Details>
         <Name>
           {currentUser.name} <Date>{format(comment.createdAt)}</Date>

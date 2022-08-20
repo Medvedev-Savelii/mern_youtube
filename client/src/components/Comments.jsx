@@ -39,6 +39,7 @@ const Comments = ({ videoId }) => {
   const [comments, setComments] = useState([]);
   const [desc, setDesc] = useState("");
   const dispatch = useDispatch();
+  const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const proxy = "http://localhost:8080/api";
   useEffect(() => {
@@ -77,9 +78,15 @@ const Comments = ({ videoId }) => {
   return (
     <Container>
       <NewComment>
-        <Avatar src={currentUser.img} />
+        <Avatar
+          src={
+            currentUser.img
+              ? serverPublic + currentUser.img
+              : serverPublic + "defaultProfile.png"
+          }
+        />
         <Input
-          placeholder="Add a comment..."
+          placeholder='Add a comment...'
           value={desc}
           onChange={handleChange}
           onKeyDown={handleCommetPost}

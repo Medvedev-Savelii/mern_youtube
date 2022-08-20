@@ -123,6 +123,8 @@ const Video = () => {
   const path = useLocation().pathname.split("/")[2];
   const [channel, setChannel] = useState({});
   const proxy = "http://localhost:8080/api";
+  const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -214,7 +216,13 @@ const Video = () => {
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src={channel.img} />
+            <Image
+              src={
+                !channel.img
+                  ? serverPublic + channel.img
+                  : serverPublic + "defaultProfile.png"
+              }
+            />
             <ChannelDetail>
               <ChannelName>{channel.name}</ChannelName>
               <ChannelCounter>{channel.subsctibers} subscribers</ChannelCounter>

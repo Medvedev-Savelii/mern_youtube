@@ -123,11 +123,6 @@ const SignIn = () => {
         email,
         password,
       });
-      console.log(data.token);
-      if (!data.token) {
-        return alert("Не удалось авторизоваться!");
-      }
-      window.localStorage.setItem("token", data.token);
       navigate("/");
     } catch (err) {
       console.log(err);
@@ -139,12 +134,12 @@ const SignIn = () => {
         <Title>Sign in</Title>
         <SubTitle>to continue to LamaTube</SubTitle>
         <Input
-          placeholder="username"
+          placeholder='username'
           onChange={(e) => setName(e.target.value)}
         />
         <Input
-          type="password"
-          placeholder="password"
+          type='password'
+          placeholder='password'
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button onClick={handleLogin}>Sign in</Button>
@@ -152,13 +147,13 @@ const SignIn = () => {
         <Button onClick={signInWithGoogle}>Signin with Google</Button>
         <Title>or</Title>
         <Input
-          placeholder="username"
+          placeholder='username'
           onChange={(e) => setName(e.target.value)}
         />
-        <Input placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+        <Input placeholder='email' onChange={(e) => setEmail(e.target.value)} />
         <Input
-          type="password"
-          placeholder="password"
+          type='password'
+          placeholder='password'
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button onClick={handleRegister}>Sign up</Button>
